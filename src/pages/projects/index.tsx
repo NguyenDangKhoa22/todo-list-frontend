@@ -2,22 +2,31 @@ import {Clock, SlidersHorizontal} from 'lucide-react';
 import React, {useEffect, useState} from 'react';
 
 import NewLayout from '@/layouts/new-layout';
-import TaskCard, {ITaskCard} from './project/project-card';
 import useLists from '@/states/lists/use-lists';
+
+import TaskCard, {ITaskCard} from './project/project-card';
 
 export default function ProjectsPage() {
   const {myList, get} = useLists();
+  const [recentProjects, setRecentProjects] = useState<ITaskCard[]>([]);
   const [myProjects, setMyProjects] = useState<ITaskCard[]>([]);
-
-  const recentProjects = [
-    {title: 'Project 1', dueDate: 'March 30,2023', completedTaskCount: 15, totalTaskCount: 20},
-    {title: 'Project 2', dueDate: 'April 15,2023', completedTaskCount: 10, totalTaskCount: 15},
-    {title: 'Project 3', dueDate: 'May 1,2023', completedTaskCount: 5, totalTaskCount: 10}
-  ];
 
   useEffect(() => {
     get();
   }, []);
+
+  useEffect(() => {
+    const recentlyViewed = myList.slice(-3);
+    setRecentProjects(
+      recentlyViewed.map(value => ({
+        title: value.name,
+        dueDate: 'March 30,2023',
+        completedTaskCount: 15,
+        totalTaskCount: 20,
+        bgColor: 'bg-gray-300'
+      }))
+    );
+  }, [myList]);
 
   useEffect(() => {
     setMyProjects(
